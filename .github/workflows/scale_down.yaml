@@ -27,7 +27,7 @@ jobs:
           ref: ${{ github.ref }}
           path: "."
           ext: "values.yaml"
-  build:
+  changes:
     runs-on: ubuntu-latest
     name: Test changed-files
     needs: list-files
@@ -35,20 +35,23 @@ jobs:
       matrix:
         paths: ${{ fromJson(needs.list-files.outputs.paths) }}
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
-
       - name: scale down
         uses: mikefarah/yq@master
         with:
           cmd: yq e -i '.replicaCount=0' ${{ matrix.paths }}
 
-      - name: Commit report
-        run: |
-          git config --global user.name 'devops orderonline'
-          git config --global user.email 'devops@orderonline.id'
-          git add ${{ matrix.paths }}
-          git commit -am "Scheduler Scale Down"
-          git push
+  
+  push: 
+    runs-on: ubuntu-latest
+    steps: 
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+    - name: Commit report
+      run: |
+        git config --global user.name 'devops orderonline'
+        git config --global user.email 'devops@orderonline.id'
+        git add .
+        git commit -am "Scheduler Scale Down"
+        git push
       
