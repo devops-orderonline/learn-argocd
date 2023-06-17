@@ -26,5 +26,5 @@ jobs:
           author_email: "devops@orderonline.id"
           author_name: "devops-bot"
           github_token: ${{ secrets.GH_TOKEN }}
-          repository: "https://github.com/devops-orderonline/learn-argocd.git"
+          repository: "devops-orderonline/learn-argocd"
       
