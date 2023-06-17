@@ -14,19 +14,12 @@ permissions:
   contents: write
 
 jobs:
-  build:
-    runs-on: ubuntu-latest  # windows-latest | macos-latest
-    name: Test changed-files
-    strategy:
-      matrix:
-        paths: ${{ fromJson(steps.list-files.outputs.paths) }}
+
+  list-files:
+    runs-on: ubuntu-latest
     outputs:
       paths: ${{ steps.list-files.outputs.paths }}
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
-
       - name: List Files
         id: list-files
         uses: mirko-felice/list-files-action@v3.0.5
@@ -35,12 +28,21 @@ jobs:
           ref: ${{ github.ref }}
           path: "."
           ext: "values.yaml"
+  build:
+    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    name: Test changed-files
+    strategy:
+      matrix:
+        paths: ${{ fromJson(needs.list-files.outputs.paths) }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
 
       - name: scale down
         uses: mikefarah/yq@master
         with:
-          cmd: yq '.replicaCount=0.["${{ matrix.ip_address }}"].username' ${{ matrix.paths }}
-          #cmd: yq e -i '.replicaCount=0' imam/values.yaml 
+          cmd: yq e -i '.replicaCount=0' ${{ matrix.paths }}
 
       - name: Commit report
         run: |
