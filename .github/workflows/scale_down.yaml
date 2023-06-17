@@ -19,3 +19,14 @@ jobs:
         run: |
           bash scale_down.sh
         shell: bash
+      - name: Commit report
+        run: |
+          git config --global user.name 'devops orderonline'
+          git config --global user.email 'devops@orderonline.id'
+          for file in $(find . -name values.yaml)
+          do
+            git add $file
+          done
+          git commit -m "Scheduler Scale Down"
+          git push
+      
