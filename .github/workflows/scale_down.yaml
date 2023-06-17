@@ -12,6 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+          persist-credentials: false
           fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
       - name: scale down
         uses: mikefarah/yq@master
