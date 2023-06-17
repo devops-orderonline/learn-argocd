@@ -5,11 +5,6 @@ on:
     branches:
       - main
 
-# ------------------------------------------------------------------------------------------------------------
-# Event `push`: Compare the preceding commit -> to the current commit of the main branch.
-# Event `pull_request`: Compare the last commit of main -> to the current commit of a Pull Request branch.
-# ------------------------------------------------------------------------------------------------------------
-
 permissions:
   contents: write
 
@@ -36,6 +31,7 @@ jobs:
     strategy:
       matrix:
         paths: ${{ fromJson(needs.list-files.outputs.paths) }}
+      max-parallel: 1
     steps:
       - uses: actions/checkout@v3
         with:
@@ -48,11 +44,10 @@ jobs:
         run: |
           git config --global user.name 'devops orderonline'
           git config --global user.email 'devops@orderonline.id'
-          git add .
-          git commit -am "Scheduler Scale Down"
+          git add ${{ matrix.paths }}
+          git commit -am "Scheduler Scale Down ${{ matrix.paths }}"
           git push
 
-  
   # push: 
   #   runs-on: ubuntu-latest
   #   needs: changes
