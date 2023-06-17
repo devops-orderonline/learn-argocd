@@ -5,9 +5,6 @@ on:
     branches:
       - main
 
-permissions:
-  contents: write
-
 jobs:
   scaledown:
     runs-on: ubuntu-latest
@@ -22,12 +19,3 @@ jobs:
         run: |
           bash scale_down.sh
         shell: bash
-      - name: Commit report
-        run: |
-          git config --global user.name 'devops orderonline'
-          git config --global user.email 'devops@orderonline.id'
-          git add .
-          git commit -m "Scheduler Scale Down"
-          git push
-  
-      
