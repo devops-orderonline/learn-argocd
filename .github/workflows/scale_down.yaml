@@ -27,7 +27,7 @@ jobs:
           git config --global user.name 'devops orderonline'
           git config --global user.email 'devops@orderonline.id'
           git add .
-          git commit -am "Scheduler Scale Down"
+          git commit -m "Scheduler Scale Down"
           git push
   
       
