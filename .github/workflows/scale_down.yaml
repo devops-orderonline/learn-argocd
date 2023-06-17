@@ -45,6 +45,7 @@ jobs:
   
   push: 
     runs-on: ubuntu-latest
+    needs: changes
     steps: 
     - uses: actions/checkout@v3
       with:
