@@ -17,33 +17,36 @@ jobs:
   build:
     runs-on: ubuntu-latest  # windows-latest | macos-latest
     name: Test changed-files
+    strategy:
+      matrix:
+        paths: ${{ fromJson(steps.list-files.outputs.paths) }}
+    outputs:
+      paths: ${{ steps.list-files.outputs.paths }}
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
 
-      # Example 1
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v36
+      - name: List Files
+        id: list-files
+        uses: mirko-felice/list-files-action@v3.0.5
+        with:
+          repo: ${{ github.repository }}
+          ref: ${{ github.ref }}
+          path: "."
+          ext: "values.yaml"
 
       - name: scale down
         uses: mikefarah/yq@master
-        
-        # To compare changes between the current commit and the last pushed remote commit set `since_last_remote_commit: true`. e.g
-        # with:
-        #   since_last_remote_commit: true 
-      - name: scale down
-        uses: mikefarah/yq@master
         with:
-          #cmd: yq '.all.children.["${{ matrix.ip_address }}"].username' ops/inventories/production.yml
-          cmd: yq e -i '.replicaCount=0' imam/values.yaml 
+          cmd: yq '.replicaCount=0.["${{ matrix.ip_address }}"].username' ${{ matrix.paths }}
+          #cmd: yq e -i '.replicaCount=0' imam/values.yaml 
 
       - name: Commit report
         run: |
           git config --global user.name 'devops orderonline'
           git config --global user.email 'devops@orderonline.id'
-          git add imam/values.yaml 
+          git add ${{ matrix.paths }}
           git commit -am "Scheduler Scale Down"
           git push
       
