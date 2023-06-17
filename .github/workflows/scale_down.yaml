@@ -37,6 +37,9 @@ jobs:
       matrix:
         paths: ${{ fromJson(needs.list-files.outputs.paths) }}
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
       - name: scale down
         uses: mikefarah/yq@master
         with:
