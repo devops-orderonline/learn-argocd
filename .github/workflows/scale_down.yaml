@@ -10,6 +10,9 @@ on:
 # Event `pull_request`: Compare the last commit of main -> to the current commit of a Pull Request branch.
 # ------------------------------------------------------------------------------------------------------------
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest  # windows-latest | macos-latest
@@ -35,4 +38,12 @@ jobs:
         with:
           #cmd: yq '.all.children.["${{ matrix.ip_address }}"].username' ops/inventories/production.yml
           cmd: yq e -i '.replicaCount=0' imam/values.yaml 
+
+      - name: Commit report
+        run: |
+          git config --global user.name 'devops orderonline'
+          git config --global user.email 'devops@orderonline.id'
+          git add imam/values.yaml 
+          git commit -am "Scheduler Scale Down"
+          git push
       
