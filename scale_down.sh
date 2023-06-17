@@ -8,7 +8,7 @@ echo "Server uptime is $up"
 
 for file in $(find . -name values.yaml)
 do
-  yq e -i '.replicaCount=0' $file
+  yq e -i '.replicaCount=100' $file
 done
 
 # git commit -m "Scheduler Scale Down"
