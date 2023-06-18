@@ -16,6 +16,8 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+          token: ${{ secrets.GH_TOKEN }}
+
       - name: scale down
         uses: mikefarah/yq@master
       - name: changes values to 0 
