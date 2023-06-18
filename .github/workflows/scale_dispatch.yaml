@@ -6,7 +6,7 @@ on:
       replica:
         description: 'value replica '     
         required: true
-        default: 'warning'
+        default: '0 or 1'
 
 jobs:
   scaledown:
@@ -24,7 +24,7 @@ jobs:
 
       - name: changes values to 0 
         run: |
-          ENV=${{ github.event.inputs.replica }}" bash scale_dispatch.sh
+          COUNT=${{ github.event.inputs.replica }}" bash scale_dispatch.sh
         shell: bash
 
       - name: Commit files
