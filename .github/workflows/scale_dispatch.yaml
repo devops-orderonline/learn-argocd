@@ -1,11 +1,12 @@
 name: CI
 
-on:
-  push:
-    branches:
-      - main
-
-permissions: write-all
+on: 
+  workflow_dispatch:
+    inputs:
+      replica:
+        description: 'value replica '     
+        required: true
+        default: 'warning'
 
 jobs:
   scaledown:
@@ -23,7 +24,7 @@ jobs:
 
       - name: changes values to 0 
         run: |
-          bash scale_down.sh
+          ENV=${{ github.event.inputs.replica }}" bash scale_dispatch.sh
         shell: bash
 
       - name: Commit files
