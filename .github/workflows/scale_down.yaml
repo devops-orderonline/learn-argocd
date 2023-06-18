@@ -20,13 +20,16 @@ jobs:
 
       - name: scale down
         uses: mikefarah/yq@master
-      - name: changes values to 0 
-        run: |
-          bash scale_down.sh
-        shell: bash
+
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
+
+      - name: changes values to 0 
+        run: |
+          bash scale_down.sh
+        shell: bash
+
       
