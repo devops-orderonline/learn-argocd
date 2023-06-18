@@ -1,12 +1,8 @@
-name: Scale replicas by dispatch
+name: Scale up replicas by cronjob
 
 on: 
-  workflow_dispatch:
-    inputs:
-      replica:
-        description: 'value replica '     
-        required: true
-        default: '0 or 1'
+  schedule:
+    - cron: "0 6 * * *"
 
 jobs:
   scaledown:
@@ -22,7 +18,7 @@ jobs:
       - name: scale down
         uses: mikefarah/yq@master
 
-      - name: changes values to 0 or 1
+      - name: changes replicaCount values to 1
         run: |
           COUNT=${{ github.event.inputs.replica }} bash .github/scripts/scale_dispatch.sh
         shell: bash
@@ -32,7 +28,7 @@ jobs:
           git config --local user.email "devops@users.noreply.github.com"
           git config --local user.name "devops[bot]"
           git add .
-          git commit -a -m "scale replicas by dispatch"
+          git commit -a -m "scale up replicas by cronjob"
 
       - name: Push changes
         uses: ad-m/github-push-action@master
