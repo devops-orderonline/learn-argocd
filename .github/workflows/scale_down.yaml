@@ -5,9 +5,6 @@ on:
     branches:
       - main
 
-permissions:
-  repository-projects: write
-
 jobs:
   scaledown:
     runs-on: ubuntu-latest
