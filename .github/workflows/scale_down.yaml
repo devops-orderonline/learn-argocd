@@ -20,11 +20,9 @@ jobs:
         run: |
           bash scale_down.sh
         shell: bash
-      - name: Commit & Push changes
-        uses: actions-js/push@master
+      - name: Push changes
+        uses: ad-m/github-push-action@master
         with:
-          author_email: "devops@orderonline.id"
-          author_name: "devops-bot"
           github_token: ${{ secrets.GH_TOKEN }}
-          repository: "devops-orderonline/learn-argocd"
+          branch: ${{ github.ref }}
       
