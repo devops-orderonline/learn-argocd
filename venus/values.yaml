@@ -2,11 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-<<<<<<< HEAD
-replicaCount: 1
-=======
 replicaCount: 0
->>>>>>> db6678e193e3ba9cc1291a25b3e3865aa57c67cd
 image:
   repository: nginx
   pullPolicy: IfNotPresent
